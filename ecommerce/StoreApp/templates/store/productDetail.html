@@ -1,0 +1,10 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ object.pname }}{% endblock %}
+
+{% block content %}
+<h2>{{ object.pname }}</h2>
+<p>Үнэ: ${{ object.price }}</p>
+<p>Төрөл: {{ object.category.cname }}</p>
+<a href="{% url 'productList' %}">Буцах</a>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h2>Жагсаалт</h2>
+<ul>
+    {% for product in object_list %}
+        <li>
+            <a href="{% url 'productDetail' product.pk %}">{{ product.pname }}</a> - {{ product.price }}
+        </li>
+        {% empty %}
+        <li>Бараа бүртгээгүй байна.</li>
+        {% endfor %}
+    </ul>
+    <a href="/product/add/">нэмэх</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'store/base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ bform }}
+        <button type="submit">Хадгалах</button>
+    </form>
+    <a href="{% url 'productList' %}">Буцах</a>
+{% endblock %}
