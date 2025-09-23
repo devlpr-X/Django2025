@@ -1,6 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 from shop_app import views
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls.static import static
+from .settings import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -15,4 +19,4 @@ urlpatterns = [
     path("signin/", views.signin, name="signin"),
     path("store/", views.store, name="store"),
     path("place_order/", views.place_order, name="place_order"),
-]
+] + static(STATIC_URL, document_root = STATIC_DIR)
