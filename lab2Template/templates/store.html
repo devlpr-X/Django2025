@@ -2,72 +2,65 @@
 {% load static %}
 
 {% block content %}
-<!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
   <div class="container">
-    <h2 class="title-page">Our Store</h2>
+    <h2 class="title-page">Манай дэлгүүр</h2>
   </div>
 </section>
-<!-- ========================= SECTION PAGETOP END// ========================= -->
 
-<!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-content padding-y">
 <div class="container">
   <div class="row">
+
+    <!-- Sidebar -->
     <aside class="col-md-3">
       <div class="card">
+
         <!-- Categories -->
         <article class="filter-group">
           <header class="card-header">
             <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
               <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Categories</h6>
+              <h6 class="title">Ангилал</h6>
             </a>
           </header>
           <div class="filter-content collapse show" id="collapse_1">
             <div class="card-body">
               <ul class="list-menu">
-                <li><a href="#">People</a></li>
-                <li><a href="#">Watches</a></li>
-                <li><a href="#">Cinema</a></li>
-                <li><a href="#">Clothes</a></li>
-                <li><a href="#">Home items</a></li>
-                <li><a href="#">Animals</a></li>
+                {% for category in categories %}
+                  <li><a href="{% url 'store_by_category' category.slug %}">{{ category.category_name }}</a></li>
+                {% empty %}
+                  <span class="dropdown-item">Ангилал олдсонгүй</span>
+                {% endfor %}
               </ul>
             </div>
           </div>
         </article>
+
         <!-- Sizes -->
         <article class="filter-group">
           <header class="card-header">
             <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
               <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Sizes</h6>
+              <h6 class="title">Хэмжээ</h6>
             </a>
           </header>
           <div class="filter-content collapse show" id="collapse_4">
             <div class="card-body">
-              <label class="checkbox-btn">
-                <input type="checkbox"> <span class="btn btn-light"> XS </span>
-              </label>
-              <label class="checkbox-btn">
-                <input type="checkbox"> <span class="btn btn-light"> SM </span>
-              </label>
-              <label class="checkbox-btn">
-                <input type="checkbox"> <span class="btn btn-light"> LG </span>
-              </label>
-              <label class="checkbox-btn">
-                <input type="checkbox"> <span class="btn btn-light"> XXL </span>
-              </label>
+              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XS </span></label>
+              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> SM </span></label>
+              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> LG </span></label>
+              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XXL </span></label>
             </div>
           </div>
         </article>
+
         <!-- Price -->
         <article class="filter-group">
           <header class="card-header">
             <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
               <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Price range</h6>
+              <h6 class="title">Үнэ</h6>
             </a>
           </header>
           <div class="filter-content collapse show" id="collapse_3">
@@ -96,169 +89,84 @@
                   </select>
                 </div>
               </div>
-              <button class="btn btn-block btn-primary">Apply</button>
+              <button class="btn btn-block btn-primary">Хайх</button>
             </div>
           </div>
         </article>
       </div>
     </aside>
 
+    <!-- Main content -->
     <main class="col-md-9">
       <header class="border-bottom mb-4 pb-3">
         <div class="form-inline">
-          <span class="mr-md-auto">32 Items found</span>
+          <span class="mr-md-auto">{{ count }} бүтээгдэхүүн олдлоо.</span>
         </div>
       </header>
 
       <div class="row">
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/1.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Great item name goes here</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-							<del class="price-old">$1980</del>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-success">Added to cart</a>
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/2.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/3.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/4.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/5.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/6.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/7.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	
-		<div class="col-md-4">
-			<figure class="card card-product-grid">
-				<div class="img-wrap"> 
-					<img src="{% static 'images/items/1.jpg' %}">
-				</div>
-				<figcaption class="info-wrap">
-					<div class="fix-height">
-						<a href="{% url 'product_detail' %}" class="title">Product name goes here just for demo item</a>
-						<div class="price-wrap mt-2">
-							<span class="price">$1280</span>
-						</div>
-					</div>
-					<a href="#" class="btn btn-block btn-primary">Add to cart</a>	
-				</figcaption>
-			</figure>
-		</div>
-	</div>
-	
+        {% for product in products %}
+        <div class="col-md-4">
+          <figure class="card card-product-grid">
+            <div class="img-wrap"> 
+              {% if product.images %}
+              <a href="{% url 'product_detail_slug' product.category.slug product.slug %}">
+                <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
+              </a>
+              {% endif %}
+            </div>
+            <figcaption class="info-wrap">
+              <div class="fix-height">
+                {% if product.category %}
+                <a href="{% url 'product_detail_slug' product.category.slug product.slug %}" class="title">{{ product.name }}</a>
+                {% else %}
+                {{ product.name }}
+                {% endif %}
+                <div class="price-wrap mt-2">
+                  <span class="price">${{ product.price }}</span>
+                  {% if product.old_price %}
+                  <del class="price-old">${{ product.old_price }}</del>
+                  {% endif %}
+                </div>
+              </div>
+              <a href="#" class="btn btn-block btn-primary">Сагсанд нэмэх</a>  
+            </figcaption>
+          </figure>
+        </div>
+        {% empty %}
+          <p>Бүтээгдэхүүн олдсонгүй</p>
+        {% endfor %}
+      </div>
 
       <!-- Pagination -->
-      <nav class="mt-4" aria-label="Page navigation sample">
+      <nav class="mt-4" aria-label="Page navigation">
         <ul class="pagination">
-          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          {% if products.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ products.previous_page_number }}">Өмнөх</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><a class="page-link">Өмнөх</a></li>
+          {% endif %}
+
+          {% for num in products.paginator.page_range %}
+            {% if products.number == num %}
+              <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if products.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ products.next_page_number }}">Дараах</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><a class="page-link">Дараах</a></li>
+          {% endif %}
         </ul>
       </nav>
+
     </main>
   </div>
 </div>
