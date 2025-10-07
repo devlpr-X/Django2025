@@ -76,10 +76,19 @@
 </div> <!-- row.// -->
 
 <hr>
+
+{% if product.stock == 0 %}
+<button class="btn btn-secondary" disabled>
+	<span class="text">Бараа дууссан</span>
+	<i class="fas fa-ban"></i>
+</button>
+{% else %}
 <a href="{% url 'cart' %}" class="btn btn-primary">
 	<span class="text">Сагсанд нэмэх</span> 
 	<i class="fas fa-shopping-cart"></i>
 </a>
+{% endif %}
+
 
 </article> <!-- content-body .// -->
 		</main> <!-- col.// -->

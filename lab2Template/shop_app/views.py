@@ -15,12 +15,15 @@ def dashboard(request):
 def order_complete(request):
     return render(request, "order_complete.html")
 
-def product_detail(request, category_slug, product_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    product = get_object_or_404(Product, slug=product_slug, category=category)
-    return render(request, 'product-detail.html', {'product': product})
+def productDetail(request, categorySlug, productSlug):
+    category = get_object_or_404(Category, slug=categorySlug)
+    product = get_object_or_404(Product, slug=productSlug, category=category)
+    return render(request, 'product-detail.html', {'product': product, 'category': category})
 
 def product_detail1(request):
+    return render(request, "product-detail.html")
+
+def product_detail11(request):
     return render(request, "product-detail.html")
 
 def register(request):
@@ -49,8 +52,6 @@ def store(request, slug=None):
         'products': products,
         'count': products_list.count()
     }
-    print("products[0].category.slug")
-    print(products[0].category.slug, products[0].product_name)
     return render(request, 'store.html', context)
 
 def place_order(request):
