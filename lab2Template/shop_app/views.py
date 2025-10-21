@@ -43,7 +43,7 @@ def store(request, slug=None):
         category = get_object_or_404(Category, slug=slug)
         products_list = products_list.filter(category=category)
 
-    paginator = Paginator(products_list, 8)
+    paginator = Paginator(products_list, 6)
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
 
