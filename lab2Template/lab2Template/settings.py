@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop_app',
+    'cart_app',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,7 @@ TEMPLATES = [
                 
                 #context processor
                 'lab2Template.contextProcessors.categoriesProcessor',
+                'cart_app.context_processors.counter',
             ],
         },
     },

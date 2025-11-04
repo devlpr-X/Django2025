@@ -30,7 +30,7 @@ class Product(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     def getUrl(self):
-        return reverse("productDetail", kwargs= {
+        return reverse("product_detail", kwargs= {
             "categorySlug": self.category.slug,
             "productSlug": self.slug
         })

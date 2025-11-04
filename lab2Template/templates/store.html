@@ -133,7 +133,7 @@
               </div>
 
               {% if product.stock > 0 %}
-                <a href="{% url 'cart' %}" class="btn btn-block btn-primary">
+                <a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">
                   <span class="text">Сагсанд нэмэх</span>
                   <i class="fas fa-shopping-cart"></i>
                 </a>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from shop_app import views
 from django.conf.urls.static import static
 from .settings import *
@@ -12,13 +12,14 @@ urlpatterns = [
     path("signin/",     views.signin,   name="signin"),
     path("register/",   views.register, name="register"),
     
+    path("cart/",           include('cart_app.urls'),          name="cart"),
     path("cart/",           views.cart,          name="cart"),
     path("dashboard/",      views.dashboard,     name="dashboard"),
     path("search/",         views.search_result, name="search_result"),
     path("order_complete/", views.order_complete,name="order_complete"),
     path("place_order/",    views.place_order,   name="place_order"),
 
-    path("<slug:categorySlug>/<slug:productSlug>",     views.productDetail,  name="productDetail"),
+    path("<slug:categorySlug>/<slug:productSlug>",     views.product_detail,  name="product_detail"),
 
     path('store/',      views.store, name='store'),  
     path('<str:slug>/', views.store, name='categoryDetail'),  

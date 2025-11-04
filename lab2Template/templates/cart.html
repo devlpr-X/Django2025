@@ -6,6 +6,16 @@
 <div class="container">
 
 <!-- ============================ КАРТ ХЭСЭГ ================================= -->
+{% if not cart_items %}
+<div class="text-center">
+	<h3>Таны сагс хоосон байна.</h3>
+	<br>
+	<a href="{% url 'store' %}"
+		class="btn btn-primary">
+		Дэлгүүр рүү
+	</a>
+</div>
+{% else %}
 <div class="row">
 	<aside class="col-lg-9">
 		<div class="card">
@@ -19,12 +29,13 @@
 					</tr>
 				</thead>
 				<tbody>
+					{% for cart_item in cart_items %}
 					<tr>
 						<td>
 							<figure class="itemside align-items-center">
-								<div class="aside"><img src="{% static 'images/items/11.jpg' %}" class="img-sm"></div>
+								<div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
 								<figcaption class="info">
-									<a href="#" class="title text-dark">Camera Canon EOS M50 Kit</a>
+									<a href="{{ cart_item.product.get_url }}" class="title text-dark">{{cart_item.product.product_name}}</a>
 									<p class="text-muted small">Матриц: 25 Mpx <br> Бренд: Canon</p>
 								</figcaption>
 							</figure>
@@ -33,91 +44,29 @@
 							<div class="col"> 
 								<div class="input-group input-spinner">
 									<div class="input-group-prepend">
-										<button class="btn btn-light" type="button"> <i class="fa fa-minus"></i> </button>
+										<a href="{% url 'remove_cart' cart_item.product.id %}" class="btn btn-light" ><i class="fa fa-minus"></i> </a>
 									</div>
-									<input type="text" class="form-control" value="1">
+									<input type="text" class="form-control" value="{{cart_item.quantity}}">
+									<span class="gray">{{cart_item.stock}}</span>
 									<div class="input-group-append">
-										<button class="btn btn-light" type="button"> <i class="fa fa-plus"></i> </button>
+										<a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button"> <i class="fa fa-plus"></i> </a>
 									</div>
 								</div>
 							</div>
 						</td>
 						<td> 
 							<div class="price-wrap"> 
-								<var class="price">$1156.00</var> 
-								<small class="text-muted"> $315.20 нэг бүр </small> 
+								<var class="price">{{cart_item.sub_total}}</var> 
+								<small class="text-muted"> {{cart_item.product.price}} нэг бүр </small> 
 							</div>
 						</td>
 						<td class="text-right"> 
-							<a href="" class="btn btn-danger"> Устгах</a>
+							<a href="{% url 'remove_cart_item' cart_item.product.id %}" class="btn btn-danger"> Устгах</a>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<figure class="itemside align-items-center">
-								<div class="aside"><img src="{% static 'images/items/10.jpg' %}" class="img-sm"></div>
-								<figcaption class="info">
-									<a href="#" class="title text-dark">ADATA Premier ONE microSDXC</a>
-									<p class="text-muted small">Хэмжээ: 256 GB  <br> Бренд: ADATA </p>
-								</figcaption>
-							</figure>
-						</td>
-						<td> 
-							<div class="col"> 
-								<div class="input-group input-spinner">
-									<div class="input-group-prepend">
-										<button class="btn btn-light" type="button"> <i class="fa fa-minus"></i> </button>
-									</div>
-									<input type="text" class="form-control" value="1">
-									<div class="input-group-append">
-										<button class="btn btn-light" type="button"> <i class="fa fa-plus"></i> </button>
-									</div>
-								</div>
-							</div>
-						</td>
-						<td> 
-							<div class="price-wrap"> 
-								<var class="price">$149.97</var> 
-								<small class="text-muted"> $75.00 нэг бүр </small>  
-							</div>
-						</td>
-						<td class="text-right"> 
-							<a href="" class="btn btn-danger"> Устгах</a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<figure class="itemside align-items-center">
-								<div class="aside"><img src="{% static 'images/items/9.jpg' %}" class="img-sm"></div>
-								<figcaption class="info">
-									<a href="#" class="title text-dark">Logitec тоглоомын чихэвч</a>
-									<p class="small text-muted">Верс: CUH-ZCT2E  <br> Бренд: Sony</p>
-								</figcaption>
-							</figure>
-						</td>
-						<td> 
-							<div class="col"> 
-								<div class="input-group input-spinner">
-									<div class="input-group-prepend">
-										<button class="btn btn-light" type="button"> <i class="fa fa-minus"></i> </button>
-									</div>
-									<input type="text" class="form-control" value="1">
-									<div class="input-group-append">
-										<button class="btn btn-light" type="button"> <i class="fa fa-plus"></i> </button>
-									</div>
-								</div>
-							</div>
-						</td>
-						<td> 
-							<div class="price-wrap"> 
-								<var class="price">$98.00</var> 
-								<small class="text-muted"> $578.00 нэг бүр</small> 
-							</div>
-						</td>
-						<td class="text-right"> 
-							<a href="" class="btn btn-danger"> Устгах</a>
-						</td>
-					</tr>
+							
+					{% endfor %}
+					
 				</tbody>
 			</table>
 		</div> <!-- card.// -->
@@ -128,15 +77,15 @@
 			<div class="card-body">
 				<dl class="dlist-align">
 				  <dt>Нийт үнэ:</dt>
-				  <dd class="text-right">$69.97</dd>
+				  <dd class="text-right">{{total}}₮</dd>
 				</dl>
 				<dl class="dlist-align">
 				  <dt>Татвар:</dt>
-				  <dd class="text-right"> $10.00</dd>
+				  <dd class="text-right"> {{tax}}₮</dd>
 				</dl>
 				<dl class="dlist-align">
-				  <dt>Нийт:</dt>
-				  <dd class="text-right text-dark b"><strong>$59.97</strong></dd>
+				  <dt>Нийт: </dt>
+				  <dd class="text-right text-dark b"><strong>{{grand}}₮</strong></dd>
 				</dl>
 				<hr>
 				<p class="text-center mb-3">
@@ -149,7 +98,8 @@
 	</aside>
 </div>
 <!-- ============================ КАРТ ХЭСЭГ ДУУСАВ .// ================================= -->
-
+{% endif %}
+</div>
 </div> <!-- container .//  -->
 </section>
 {% endblock %}

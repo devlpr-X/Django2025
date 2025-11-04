@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Product, Category
+from cart_app.models import CartItem
+from cart_app.views import _cart_id
 
 def index(request):
     products = Product.objects.order_by('-created_date')[:4]
@@ -15,16 +17,16 @@ def dashboard(request):
 def order_complete(request):
     return render(request, "order_complete.html")
 
-def productDetail(request, categorySlug, productSlug):
+def product_detail(request, categorySlug, productSlug):
     category = get_object_or_404(Category, slug=categorySlug)
     product = get_object_or_404(Product, slug=productSlug, category=category)
-    return render(request, 'product-detail.html', {'product': product, 'category': category})
-
-def product_detail1(request):
-    return render(request, "product-detail.html")
-
-def product_detail11(request):
-    return render(request, "product-detail.html")
+    in_cart = CartItem.objects.filter(cart__id=_cart_id(request), product=product).exists()
+    return render(request, 'product-detail.html', {
+        'single_product': product, 
+        'in_cart': in_cart, 
+        'product': product, 
+        'category': category
+    })
 
 def register(request):
     return render(request, "register.html")

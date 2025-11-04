@@ -27,9 +27,9 @@
 
             <div class="mt-2">
               {% if p.stock > 0 %}
-              <button class="btn btn-sm btn-primary btn-block" onclick="increaseStock({{ p.id }})">
+              <a href="" class="btn btn-sm btn-primary btn-block" onclick="{{ p.id }}">
                 <i class="fas fa-shopping-cart"></i> Сагсанд нэмэх
-              </button>
+              </a>
               {% else %}
               <button class="btn btn-sm btn-secondary btn-block" disabled>
                 <i class="fas fa-ban"></i> Бараа дууссан
@@ -44,13 +44,4 @@
 
   </div>
 </section>
-
-<script>
-function increaseStock(id) {
-  const stockElement = document.getElementById(`stock-${id}`);
-  let currentStock = parseInt(stockElement.textContent);
-  stockElement.textContent = currentStock + 1;
-
-}
-</script>
 {% endblock %}
