@@ -27,7 +27,7 @@
 
             <div class="mt-2">
               {% if p.stock > 0 %}
-              <a href="" class="btn btn-sm btn-primary btn-block" onclick="{{ p.id }}">
+              <a href="{% url 'add_cart' p.id %}" class="btn btn-sm btn-primary btn-block">
                 <i class="fas fa-shopping-cart"></i> Сагсанд нэмэх
               </a>
               {% else %}

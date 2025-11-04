@@ -37,7 +37,7 @@
           </div>
         </article>
 
-        <!-- Sizes -->
+        <!-- Sizes (Жишээ) -->
         <article class="filter-group">
           <header class="card-header">
             <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
@@ -55,7 +55,7 @@
           </div>
         </article>
 
-        <!-- Price -->
+        <!-- Price Filter (Жишээ) -->
         <article class="filter-group">
           <header class="card-header">
             <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
@@ -93,6 +93,7 @@
             </div>
           </div>
         </article>
+
       </div>
     </aside>
 
@@ -108,28 +109,29 @@
         {% for product in products %}
         <div class="col-md-4">
           <figure class="card card-product-grid">
-            <div class="img-wrap"> 
+            <div class="img-wrap">
               {% if product.images %}
-              <a href="{{ product.getUrl }}">
-                <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
-              </a>
+                <a href="{{ product.getUrl }}">
+                  <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
+                </a>
               {% else %}
-              <img src="{% static 'images/no_image_available.png' %}" alt="No image" />
+                <img src="{% static 'images/no_image_available.png' %}" alt="No image" />
               {% endif %}
             </div>
             <figcaption class="info-wrap">
               <div class="fix-height">
                 {% if product.category %}
-                <a href="{{ product.getUrl }}" class="title">{{ product.name }}</a>
+                  <a href="{{ product.getUrl }}" class="title">{{ product.product_name }}</a>
                 {% else %}
-                {{ product.name }}
+                  {{ product.product_name }}
                 {% endif %}
                 <div class="price-wrap mt-2">
-                  <span class="price">${{ product.price }}</span>
+                  <span class="price">{{ product.price }}₮</span>
                   {% if product.old_price %}
-                  <del class="price-old">${{ product.old_price }}</del>
+                    <del class="price-old">{{ product.old_price }}₮</del>
                   {% endif %}
                 </div>
+                <small class="text-muted">Үлдэгдэл: {{ product.stock }}</small>
               </div>
 
               {% if product.stock > 0 %}
@@ -143,7 +145,7 @@
                   <i class="fas fa-ban"></i>
                 </button>
               {% endif %}
-              
+
             </figcaption>
           </figure>
         </div>

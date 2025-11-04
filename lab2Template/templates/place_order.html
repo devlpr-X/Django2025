@@ -3,202 +3,144 @@
 
 {% block content %}
 <section class="section-content padding-y bg">
-<div class="container">
+  <div class="container">
+    <!-- КОМПОНЕНТ 2 -->
+    <div class="row">
 
-<!-- ============================ КОМПОНЕНТ 2 ================================= -->
-<div class="row">
-	<main class="col-md-8">
+      <!-- Үндсэн хэсэг -->
+      <main class="col-md-8">
+        <article class="card mb-4">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Сагсны тойм</h4>
+            <div class="row">
+              {% if cart_items %}
+                {% for cart_item in cart_items %}
+                <div class="col-md-6">
+                  <figure class="itemside mb-4 d-flex align-items-center">
+                    <div class="aside">
+                      {% if cart_item.product.images %}
+                      <img src="{{ cart_item.product.images.url }}" class="border img-sm" alt="{{ cart_item.product.product_name }}">
+                      {% else %}
+                      <img src="{% static 'images/no_image_available.png' %}" class="border img-sm" alt="No image">
+                      {% endif %}
+                    </div>
+                    <figcaption class="info ml-3">
+                      <p class="mb-1">{{ cart_item.product.product_name }}</p>
+                      <small class="text-muted">Тоо ширхэг: {{ cart_item.quantity }} ширхэг</small><br>
+                      <small class="text-muted">Нийт үнэ: {{ cart_item.sub_total }}₮</small>
+                    </figcaption>
+                  </figure>
+                </div>
+                {% endfor %}
+              {% else %}
+                <div class="col-12 text-center">
+                  <p>Таны сагс хоосон байна.</p>
+                </div>
+              {% endif %}
+            </div> <!-- row end -->
+          </div> <!-- card-body -->
+        </article>
 
-		<article class="card mb-4">
-			<div class="card-body">
-				<h4 class="card-title mb-4">Сагсны тойм</h4>
-				<div class="row">
-					<div class="col-md-6">
-						<figure class="itemside  mb-4">
-							<div class="aside">
-								<img src="{% static 'images/items/1.jpg' %}" class="border img-sm">
-							</div>
-							<figcaption class="info">
-								<p>Apple iPad (2019) 32Gb Wi-Fi алтан өнгөтэй</p>
-								<span class="text-muted">2ш = $560</span>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="col-md-6">
-						<figure class="itemside  mb-4">
-							<div class="aside">
-								<img src="{% static 'images/items/2.jpg' %}" class="border img-sm">
-							</div>
-							<figcaption class="info">
-								<p>Apple iPad (2019) 32Gb Wi-Fi алтан өнгөтэй</p>
-								<span class="text-muted">2ш = $560</span>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="col-md-6">
-						<figure class="itemside  mb-4">
-							<div class="aside">
-								<img src="{% static 'images/items/3.jpg' %}" class="border img-sm">
-							</div>
-							<figcaption class="info">
-								<p>Apple iPad (2019) 32Gb Wi-Fi алтан өнгөтэй</p>
-								<span class="text-muted">2ш = $560</span>
-							</figcaption>
-						</figure>
-					</div>
-					<div class="col-md-6">
-						<figure class="itemside  mb-4">
-							<div class="aside">
-								<img src="{% static 'images/items/4.jpg' %}" class="border img-sm">
-							</div>
-							<figcaption class="info">
-								<p>Apple iPad (2019) 32Gb Wi-Fi алтан өнгөтэй</p>
-								<span class="text-muted">2ш = $560</span>
-							</figcaption>
-						</figure>
-					</div>
-				</div> <!-- row.// -->
-			</div> <!-- card-body.// -->
-		</article> <!-- card.// -->
+        <form method="post" action="{% url 'place_order' %}">
+          {% csrf_token %}
 
-		<article class="card mb-4">
-			<div class="card-body">
-				<h4 class="card-title mb-4">Холбоо барих мэдээлэл</h4>
-				<form>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label>Нэр</label>
-							<input type="text" placeholder="Энд бичнэ үү" class="form-control">
-						</div>
-						<div class="form-group col-sm-6">
-							<label>Овог</label>
-							<input type="text" placeholder="Энд бичнэ үү" class="form-control">
-						</div>
-						<div class="form-group col-sm-6">
-							<label>Утас</label>
-							<input type="text" value="+998" class="form-control">
-						</div>
-						<div class="form-group col-sm-6">
-							<label>И-мэйл</label>
-							<input type="email" placeholder="example@gmail.com" class="form-control">
-						</div>
-					</div>
-				</form>
-			</div>
-		</article>
+          <article class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title mb-4">Холбоо барих мэдээлэл</h4>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="first_name">Нэр</label>
+                  <input type="text" name="first_name" id="first_name" placeholder="Энд бичнэ үү" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="last_name">Овог</label>
+                  <input type="text" name="last_name" id="last_name" placeholder="Энд бичнэ үү" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="phone">Утас</label>
+                  <input type="text" name="phone" id="phone" value="+998" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="email">И-мэйл</label>
+                  <input type="email" name="email" id="email" placeholder="example@gmail.com" class="form-control" required>
+                </div>
+              </div>
+            </div>
+          </article>
 
-		<article class="card mb-4">
-			<div class="card-body">
-				<h4 class="card-title mb-4">Хүргэлтийн мэдээлэл</h4>
-				<form>
-					<div class="row">
-						<div class="form-group col-sm-6">
-							<label>Улс*</label>
-							<select class="form-control">
-								<option>Энэтхэг</option>
-								<option>АНУ</option>
-								<option>Франц</option>
-								<option>Итали</option>
-							</select>
-						</div>
-						<div class="form-group col-sm-6">
-							<label>Муж / Аймаг*</label>
-							<input type="text" placeholder="Энд бичнэ үү" class="form-control">
-						</div>
-						<div class="form-group col-sm-8">
-							<label>Гудамж*</label>
-							<input type="text" placeholder="Энд бичнэ үү" class="form-control">
-						</div>
-						<div class="form-group col-sm-4">
-							<label>Барилга</label>
-							<input type="text" class="form-control">
-						</div>
-						<div class="form-group col-sm-4">
-							<label>Байр</label>
-							<input type="text" placeholder="Энд бичнэ үү" class="form-control">
-						</div>
-						<div class="form-group col-sm-4">
-							<label>Шуудангийн код</label>
-							<input type="text" class="form-control">
-						</div>
-						<div class="form-group col-sm-4">
-							<label>Zip код</label>
-							<input type="text" class="form-control">
-						</div>
-					</div>
-				</form>
-			</div>
-		</article>
+          <article class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title mb-4">Хүргэлтийн мэдээлэл</h4>
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="address_country">Улс*</label>
+                  <select id="address_country" name="address_country" class="form-control" required>
+                    <option>Энэтхэг</option>
+                    <option>АНУ</option>
+                    <option>Франц</option>
+                    <option>Итали</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="address_region">Муж / Аймаг*</label>
+                  <input type="text" name="address_region" id="address_region" placeholder="Энд бичнэ үү" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-8">
+                  <label for="address_street">Гудамж*</label>
+                  <input type="text" name="address_street" id="address_street" placeholder="Энд бичнэ үү" class="form-control" required>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="address_building">Барилга</label>
+                  <input type="text" name="address_building" id="address_building" class="form-control">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="address_apartment">Байр</label>
+                  <input type="text" name="address_apartment" id="address_apartment" placeholder="Энд бичнэ үү" class="form-control">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="postal_code">Шуудангийн код</label>
+                  <input type="text" name="postal_code" id="postal_code" class="form-control">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="zip_code">Zip код</label>
+                  <input type="text" name="zip_code" id="zip_code" class="form-control">
+                </div>
+              </div>
+            </div>
+          </article>
 
-		<article class="accordion" id="accordion_pay">
-			<div class="card">
-				<header class="card-header">
-					<img src="{% static 'images/misc/payment-paypal.png' %}" class="float-right" height="24">
-					<label class="form-check collapsed" data-toggle="collapse" data-target="#pay_paynet">
-						<input class="form-check-input" name="payment-option" checked type="radio">
-						<h6 class="form-check-label">PayPal</h6>
-					</label>
-				</header>
-				<div id="pay_paynet" class="collapse show" data-parent="#accordion_pay">
-					<div class="card-body">
-						<p class="text-center text-muted">
-							PayPal дансаа холбож төлбөр хийх боломжтой.
-						</p>
-						<p class="text-center">
-							<a href="#"><img src="{% static 'images/misc/btn-paypal.png' %}" height="32"></a>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="card">
-				<header class="card-header">
-					<img src="{% static 'images/misc/payment-card.png' %}" class="float-right" height="24">
-					<label class="form-check" data-toggle="collapse" data-target="#pay_payme">
-						<input class="form-check-input" name="payment-option" type="radio">
-						<h6 class="form-check-label">Кредит карт</h6>
-					</label>
-				</header>
-				<div id="pay_payme" class="collapse" data-parent="#accordion_pay">
-					<div class="card-body">
-						<p class="alert alert-success">Зарим мэдээлэл эсвэл заавар</p>
-						<form class="form-inline">
-							<input type="text" class="form-control mr-2" placeholder="xxxx-xxxx-xxxx-xxxx">
-							<input type="text" class="form-control mr-2" style="width: 100px" placeholder="сар/жил">
-							<input type="number" class="form-control mr-2" style="width: 100px" placeholder="cvc">
-							<button class="btn btn-success">Төлөх</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</article>
+          <button type="submit" class="btn btn-primary btn-block mb-5">Захиалга хийх</button>
 
-	</main>
-	<aside class="col-md-4">
-		<div class="card">
-			<div class="card-body">
-				<dl class="dlist-align">
-				  <dt>Нийт үнэ:</dt>
-				  <dd class="text-right">$69.97</dd>
-				</dl>
-				<dl class="dlist-align">
-				  <dt>Татвар:</dt>
-				  <dd class="text-right">$10.00</dd>
-				</dl>
-				<dl class="dlist-align">
-				  <dt>Төлөх дүн:</dt>
-				  <dd class="text-right text-dark b"><strong>$59.97</strong></dd>
-				</dl>
-				<hr>
-				<p class="text-center mb-3">
-					<img src="{% static 'images/misc/payments.png' %}" height="26">
-				</p>
-				<a href="{% url 'place_order' %}" class="btn btn-primary btn-block">Захиалга хийх</a>
-			</div>
-		</div>
-	</aside>
-</div>
-<!-- ============================ КОМПОНЕНТ 2 ТӨГСӨВ  ================================= -->
+        </form>
+      </main>
 
-</div>
+      <!-- Sidebar summary -->
+      <aside class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <dl class="dlist-align">
+              <dt>Нийт үнэ:</dt>
+              <dd class="text-right">{{ total }}₮</dd>
+            </dl>
+            <dl class="dlist-align">
+              <dt>Татвар:</dt>
+              <dd class="text-right">{{ tax }}₮</dd>
+            </dl>
+            <dl class="dlist-align">
+              <dt>Төлөх дүн:</dt>
+              <dd class="text-right text-dark b"><strong>{{ grand }}₮</strong></dd>
+            </dl>
+            <hr>
+            <p class="text-center mb-3">
+              <img src="{% static 'images/misc/payments.png' %}" height="26" alt="Payment Methods">
+            </p>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+    <!-- КОМПОНЕНТ 2 ТӨГСӨВ -->
+
+  </div>
 </section>
 {% endblock %}

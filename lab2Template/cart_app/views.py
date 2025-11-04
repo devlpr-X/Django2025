@@ -68,14 +68,16 @@ def add_cart(request, product_id):
 
     try:
         cart_item = CartItem.objects.get(product=product, cart=cart)
-        cart_item.quantity += 1
-        cart_item.save()
+        if cart_item.quantity < product.stock:
+            cart_item.quantity += 1
+            cart_item.save()
     except CartItem.DoesNotExist:
-        cart_item = CartItem.objects.create(
-            product=product,
-            quantity=1,
-            cart=cart,
-        )
-    cart_item.save()
+        if product.stock > 0:
+            cart_item = CartItem.objects.create(
+                product=product,
+                quantity=1,
+                cart=cart,
+            )
+            cart_item.save()
     return redirect('cart')
 
