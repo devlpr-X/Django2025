@@ -18,7 +18,9 @@ class Category(models.Model):
         return reverse('categoryDetail', kwargs={'slug': self.slug})
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=200, unique=True)
+    product_name = models.CharField(
+        max_length=200,
+        unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(max_length=500, blank=True)
     price = models.IntegerField()
@@ -38,6 +40,7 @@ class Product(models.Model):
     
     def __str__ (self):
         return self.product_name
+        
     
     class Meta:
         db_table = "tbl_products"

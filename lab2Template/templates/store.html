@@ -27,8 +27,21 @@
             <div class="filter-content collapse show" id="collapse_1">
               <div class="card-body">
                 <ul class="list-menu">
+                  <li>
+                    <a href="{% url 'store' %}">
+                      <strong>Бүх ангилал</strong>
+                    </a>
+                  </li>
                   {% for category in categories %}
-                    <li><a href="{{ category.getUrl }}">{{ category.category_name }}</a></li>
+                    <li>
+                      <a href="?category={{ category.slug }}&keyword={{ keyword }}&min_price={{ min_price }}&max_price={{ max_price }}">
+                        {% if selected_category == category.slug %}
+                          <strong>{{ category.category_name }}</strong>
+                        {% else %}
+                          {{ category.category_name }}
+                        {% endif %}
+                      </a>
+                    </li>
                   {% empty %}
                     <span class="dropdown-item">Ангилал олдсонгүй</span>
                   {% endfor %}
@@ -37,25 +50,7 @@
             </div>
           </article>
 
-          <!-- Sizes (жишээ) -->
-          <article class="filter-group">
-            <header class="card-header">
-              <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
-                <i class="icon-control fa fa-chevron-down"></i>
-                <h6 class="title">Хэмжээ</h6>
-              </a>
-            </header>
-            <div class="filter-content collapse show" id="collapse_4">
-              <div class="card-body">
-                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XS </span></label>
-                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> SM </span></label>
-                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> LG </span></label>
-                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XXL </span></label>
-              </div>
-            </div>
-          </article>
-
-          <!-- Price Filter (жишээ) -->
+          <!-- Price Filter -->
           <article class="filter-group">
             <header class="card-header">
               <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
@@ -65,31 +60,26 @@
             </header>
             <div class="filter-content collapse show" id="collapse_3">
               <div class="card-body">
-                <div class="form-row">
-                  <div class="form-group col-md-6">
-                    <label>Min</label>
-                    <select class="form-control">
-                      <option value="0">$0</option>
-                      <option value="50">$50</option>
-                      <option value="100">$100</option>
-                      <option value="200">$200</option>
-                      <option value="500">$500</option>
-                      <option value="1000">$1000</option>
-                    </select>
+                <form method="GET" action="{% url 'search' %}">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label>Хамгийн бага</label>
+                      <input type="number" class="form-control" name="min_price" 
+                             placeholder="0" value="{{ min_price }}">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>Хамгийн их</label>
+                      <input type="number" class="form-control" name="max_price" 
+                             placeholder="0" value="{{ max_price }}">
+                    </div>
                   </div>
-                  <div class="form-group col-md-6">
-                    <label>Max</label>
-                    <select class="form-control">
-                      <option value="50">$50</option>
-                      <option value="100">$100</option>
-                      <option value="200">$200</option>
-                      <option value="500">$500</option>
-                      <option value="1000">$1000</option>
-                      <option value="2000">$2000+</option>
-                    </select>
-                  </div>
-                </div>
-                <button class="btn btn-block btn-primary">Хайх</button>
+                  
+                  <!-- Түлхүүр үг, категори хадгалах -->
+                  <input type="hidden" name="keyword" value="{{ keyword }}">
+                  <input type="hidden" name="category" value="{{ selected_category }}">
+                  
+                  <button type="submit" class="btn btn-block btn-primary">Шүүлтүүлэх</button>
+                </form>
               </div>
             </div>
           </article>
@@ -101,7 +91,15 @@
       <main class="col-md-9">
         <header class="border-bottom mb-4 pb-3">
           <div class="form-inline">
-            <span class="mr-md-auto">{{ count }} бүтээгдэхүүн олдлоо.</span>
+            <span class="mr-md-auto">
+              {% if selected_category %}
+                <strong>{{ selected_category_obj.category_name }}</strong> ангилалд
+              {% endif %}
+              {% if keyword %}
+                "{{ keyword }}" хайлтаас
+              {% endif %}
+              {{ count }} бүтээгдэхүүн олдлоо.
+            </span>
           </div>
         </header>
 
@@ -150,38 +148,56 @@
             </figure>
           </div>
           {% empty %}
-            <p>Бүтээгдэхүүн олдсонгүй</p>
+            <div class="col-md-12">
+              <p class="alert alert-info">Таны хайлтад тохирох бүтээгдэхүүн олдсонгүй.</p>
+            </div>
           {% endfor %}
         </div>
 
         <!-- Pagination -->
+        {% if products.paginator.num_pages > 1 %}
         <nav class="mt-4" aria-label="Page navigation">
-          <ul class="pagination">
+          <ul class="pagination justify-content-center">
             {% if products.has_previous %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ products.previous_page_number }}">Өмнөх</a>
+                <a class="page-link" href="?page={{ products.previous_page_number }}&keyword={{ keyword }}&min_price={{ min_price }}&max_price={{ max_price }}&category={{ selected_category }}">
+                  Өмнөх
+                </a>
               </li>
             {% else %}
-              <li class="page-item disabled"><a class="page-link">Өмнөх</a></li>
+              <li class="page-item disabled">
+                <a class="page-link">Өмнөх</a>
+              </li>
             {% endif %}
 
             {% for num in products.paginator.page_range %}
               {% if products.number == num %}
-                <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+                <li class="page-item active">
+                  <a class="page-link">{{ num }}</a>
+                </li>
               {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}&keyword={{ keyword }}&min_price={{ min_price }}&max_price={{ max_price }}&category={{ selected_category }}">
+                    {{ num }}
+                  </a>
+                </li>
               {% endif %}
             {% endfor %}
 
             {% if products.has_next %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ products.next_page_number }}">Дараах</a>
+                <a class="page-link" href="?page={{ products.next_page_number }}&keyword={{ keyword }}&min_price={{ min_price }}&max_price={{ max_price }}&category={{ selected_category }}">
+                  Дараах
+                </a>
               </li>
             {% else %}
-              <li class="page-item disabled"><a class="page-link">Дараах</a></li>
+              <li class="page-item disabled">
+                <a class="page-link">Дараах</a>
+              </li>
             {% endif %}
           </ul>
         </nav>
+        {% endif %}
 
       </main>
     </div>

@@ -86,16 +86,12 @@ $(document).ready(function() {
 	</div>
 	<a href="{% url 'store' %}" class="btn btn-outline-primary">Дэлгүүр</a>
 	<div class="col-lg  col-md-6 col-sm-12 col">
-		<form action="#" class="search">
+		<form method="GET" action="{% url 'search' %}" class="form-inline">
 			<div class="input-group w-100">
-			    <input type="text" class="form-control" style="width:60%;" placeholder="Хайх">
-			    <div class="input-group-append">
-			      <button class="btn btn-primary" type="submit">
-			        <i class="fa fa-search"></i>
-			      </button>
-			    </div>
-		    </div>
-		</form>
+				<input type="text" name="keyword" class="form-control" placeholder="Хайх...">
+				<button type="submit" class="btn btn-primary">Хайх</button>
+			</div>
+		</form>	
 	</div>
 	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
 		<div class="d-flex justify-content-end mb-3 mb-lg-0">
