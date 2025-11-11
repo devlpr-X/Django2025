@@ -40,7 +40,7 @@ class Product(models.Model):
     
     def __str__ (self):
         return self.product_name
-        
+         
     
     class Meta:
         db_table = "tbl_products"

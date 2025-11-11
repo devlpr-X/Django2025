@@ -225,8 +225,7 @@ def search(request):
     }
     return render(request, 'store.html', context)
 
-
-def searchsimple(request):
+def search2(request):
     keyword = request.GET.get('keyword', '')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
@@ -376,61 +375,61 @@ def order_complete(request):
 
 
 
-def search_raw_obj(request, category_slug=None):
-    keyword = request.GET.get('keyword', '')
-    min_price = request.GET.get('min_price')
-    max_price = request.GET.get('max_price')
-    selected_category = request.GET.get('category')
+# def search(request, category_slug=None):
+#     keyword = request.GET.get('keyword', '')
+#     min_price = request.GET.get('min_price')
+#     max_price = request.GET.get('max_price')
+#     selected_category = request.GET.get('category')
 
-    base_query = "SELECT * FROM store_product WHERE is_available = TRUE"
-    params = []
+#     base_query = "SELECT * FROM tbl_products WHERE is_available = TRUE"
+#     params = []
 
-    if keyword:
-        base_query += " AND product_name ILIKE %s"
-        params.append(f"%{keyword}%")
+#     if keyword:
+#         base_query += " AND product_name LIKE %s"
+#         params.append(f"%{keyword}%")
 
-    if min_price:
-        base_query += " AND price >= %s"
-        params.append(min_price)
+#     if min_price:
+#         base_query += " AND price >= %s"
+#         params.append(min_price)
 
-    if max_price:
-        base_query += " AND price <= %s"
-        params.append(max_price)
+#     if max_price:
+#         base_query += " AND price <= %s"
+#         params.append(max_price)
 
-    if selected_category:
-        base_query += """ AND category_id IN (
-            SELECT id FROM store_category WHERE slug = %s
-        )"""
-        params.append(selected_category)
+#     if selected_category:
+#         base_query += """ AND category_id IN (
+#             SELECT id FROM store_category WHERE slug = %s
+#         )"""
+#         params.append(selected_category)
 
-    if category_slug:
-        base_query += """ AND category_id IN (
-            SELECT id FROM store_category WHERE slug = %s
-        )"""
-        params.append(category_slug)
+#     if category_slug:
+#         base_query += """ AND category_id IN (
+#             SELECT id FROM store_category WHERE slug = %s
+#         )"""
+#         params.append(category_slug)
 
-    base_query += " ORDER BY id ASC"
+#     base_query += " ORDER BY id ASC"
 
-    products = Product.objects.raw(base_query, params)
-    products_list = list(products)
+#     products = Product.objects.raw(base_query, params)
+#     products_list = list(products)
 
-    paginator = Paginator(products_list, 6)
-    page = request.GET.get('page')
-    paged_products = paginator.get_page(page)
-    product_count = len(products_list)
+#     paginator = Paginator(products_list, 6)
+#     page = request.GET.get('page')
+#     paged_products = paginator.get_page(page)
+#     product_count = len(products_list)
 
-    categories = Category.objects.all()
+#     categories = Category.objects.all()
 
-    context = {
-        'categories': categories,
-        'products': paged_products,
-        'count': product_count,
-        'keyword': keyword,
-        'min_price': min_price,
-        'max_price': max_price,
-        'selected_category': selected_category,
-    }
-    return render(request, 'store.html', context)
+#     context = {
+#         'categories': categories,
+#         'products': paged_products,
+#         'count': product_count,
+#         'keyword': keyword,
+#         'min_price': min_price,
+#         'max_price': max_price,
+#         'selected_category': selected_category,
+#     }
+#     return render(request, 'store.html', context)
 # import sqlite3 as sql
 
 # con = sql.connect("db.sqlite3")
