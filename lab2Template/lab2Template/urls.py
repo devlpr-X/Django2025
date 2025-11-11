@@ -13,6 +13,7 @@ urlpatterns = [
     path("register/",   views.register, name="register"),
     
     path("cart/",           include('cart_app.urls'),          name="cart"),
+    path("store/",           include('shop_app.urls'),          name="store"),
     path("cart/",           views.cart,          name="cart"),
     path("dashboard/",      views.dashboard,     name="dashboard"),
     path("search/",         views.search_result, name="search_result"),
@@ -21,7 +22,6 @@ urlpatterns = [
 
     path("<slug:categorySlug>/<slug:productSlug>",     views.product_detail,  name="product_detail"),
 
-    path('store/',      views.store, name='store'),  
     path('<str:slug>/', views.store, name='categoryDetail'),  
 
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)

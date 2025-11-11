@@ -9,182 +9,182 @@
 </section>
 
 <section class="section-content padding-y">
-<div class="container">
-  <div class="row">
+  <div class="container">
+    <div class="row">
 
-    <!-- Sidebar -->
-    <aside class="col-md-3">
-      <div class="card">
+      <!-- Sidebar -->
+      <aside class="col-md-3">
+        <div class="card">
 
-        <!-- Categories -->
-        <article class="filter-group">
-          <header class="card-header">
-            <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
-              <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Ангилал</h6>
-            </a>
-          </header>
-          <div class="filter-content collapse show" id="collapse_1">
-            <div class="card-body">
-              <ul class="list-menu">
-                {% for category in categories %}
-                  <li><a href="{{ category.getUrl }}">{{ category.category_name }}</a></li>
-                {% empty %}
-                  <span class="dropdown-item">Ангилал олдсонгүй</span>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <!-- Sizes (Жишээ) -->
-        <article class="filter-group">
-          <header class="card-header">
-            <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
-              <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Хэмжээ</h6>
-            </a>
-          </header>
-          <div class="filter-content collapse show" id="collapse_4">
-            <div class="card-body">
-              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XS </span></label>
-              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> SM </span></label>
-              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> LG </span></label>
-              <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XXL </span></label>
-            </div>
-          </div>
-        </article>
-
-        <!-- Price Filter (Жишээ) -->
-        <article class="filter-group">
-          <header class="card-header">
-            <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
-              <i class="icon-control fa fa-chevron-down"></i>
-              <h6 class="title">Үнэ</h6>
-            </a>
-          </header>
-          <div class="filter-content collapse show" id="collapse_3">
-            <div class="card-body">
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label>Min</label>
-                  <select class="form-control">
-                    <option value="0">$0</option>
-                    <option value="50">$50</option>
-                    <option value="100">$100</option>
-                    <option value="200">$200</option>
-                    <option value="500">$500</option>
-                    <option value="1000">$1000</option>
-                  </select>
-                </div>
-                <div class="form-group col-md-6">
-                  <label>Max</label>
-                  <select class="form-control">
-                    <option value="50">$50</option>
-                    <option value="100">$100</option>
-                    <option value="200">$200</option>
-                    <option value="500">$500</option>
-                    <option value="1000">$1000</option>
-                    <option value="2000">$2000+</option>
-                  </select>
-                </div>
+          <!-- Categories -->
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Ангилал</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_1">
+              <div class="card-body">
+                <ul class="list-menu">
+                  {% for category in categories %}
+                    <li><a href="{{ category.getUrl }}">{{ category.category_name }}</a></li>
+                  {% empty %}
+                    <span class="dropdown-item">Ангилал олдсонгүй</span>
+                  {% endfor %}
+                </ul>
               </div>
-              <button class="btn btn-block btn-primary">Хайх</button>
             </div>
-          </div>
-        </article>
+          </article>
 
-      </div>
-    </aside>
+          <!-- Sizes (жишээ) -->
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Хэмжээ</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_4">
+              <div class="card-body">
+                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XS </span></label>
+                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> SM </span></label>
+                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> LG </span></label>
+                <label class="checkbox-btn"><input type="checkbox"> <span class="btn btn-light"> XXL </span></label>
+              </div>
+            </div>
+          </article>
 
-    <!-- Main content -->
-    <main class="col-md-9">
-      <header class="border-bottom mb-4 pb-3">
-        <div class="form-inline">
-          <span class="mr-md-auto">{{ count }} бүтээгдэхүүн олдлоо.</span>
+          <!-- Price Filter (жишээ) -->
+          <article class="filter-group">
+            <header class="card-header">
+              <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true">
+                <i class="icon-control fa fa-chevron-down"></i>
+                <h6 class="title">Үнэ</h6>
+              </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_3">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Min</label>
+                    <select class="form-control">
+                      <option value="0">$0</option>
+                      <option value="50">$50</option>
+                      <option value="100">$100</option>
+                      <option value="200">$200</option>
+                      <option value="500">$500</option>
+                      <option value="1000">$1000</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Max</label>
+                    <select class="form-control">
+                      <option value="50">$50</option>
+                      <option value="100">$100</option>
+                      <option value="200">$200</option>
+                      <option value="500">$500</option>
+                      <option value="1000">$1000</option>
+                      <option value="2000">$2000+</option>
+                    </select>
+                  </div>
+                </div>
+                <button class="btn btn-block btn-primary">Хайх</button>
+              </div>
+            </div>
+          </article>
+
         </div>
-      </header>
+      </aside>
 
-      <div class="row">
-        {% for product in products %}
-        <div class="col-md-4">
-          <figure class="card card-product-grid">
-            <div class="img-wrap">
-              {% if product.images %}
-                <a href="{{ product.getUrl }}">
-                  <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
-                </a>
-              {% else %}
-                <img src="{% static 'images/no_image_available.png' %}" alt="No image" />
-              {% endif %}
-            </div>
-            <figcaption class="info-wrap">
-              <div class="fix-height">
-                {% if product.category %}
-                  <a href="{{ product.getUrl }}" class="title">{{ product.product_name }}</a>
+      <!-- Main content -->
+      <main class="col-md-9">
+        <header class="border-bottom mb-4 pb-3">
+          <div class="form-inline">
+            <span class="mr-md-auto">{{ count }} бүтээгдэхүүн олдлоо.</span>
+          </div>
+        </header>
+
+        <div class="row">
+          {% for product in products %}
+          <div class="col-md-4">
+            <figure class="card card-product-grid">
+              <div class="img-wrap">
+                {% if product.images %}
+                  <a href="{{ product.getUrl }}">
+                    <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
+                  </a>
                 {% else %}
-                  {{ product.product_name }}
+                  <img src="{% static 'images/no_image_available.png' %}" alt="No image" />
                 {% endif %}
-                <div class="price-wrap mt-2">
-                  <span class="price">{{ product.price }}₮</span>
-                  {% if product.old_price %}
-                    <del class="price-old">{{ product.old_price }}₮</del>
-                  {% endif %}
-                </div>
-                <small class="text-muted">Үлдэгдэл: {{ product.stock }}</small>
               </div>
+              <figcaption class="info-wrap">
+                <div class="fix-height">
+                  {% if product.category %}
+                    <a href="{{ product.getUrl }}" class="title">{{ product.product_name }}</a>
+                  {% else %}
+                    {{ product.product_name }}
+                  {% endif %}
+                  <div class="price-wrap mt-2">
+                    <span class="price">{{ product.price }}₮</span>
+                    {% if product.old_price %}
+                      <del class="price-old">{{ product.old_price }}₮</del>
+                    {% endif %}
+                  </div>
+                  <small class="text-muted">Үлдэгдэл: {{ product.stock }}</small>
+                </div>
 
-              {% if product.stock > 0 %}
-                <a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">
-                  <span class="text">Сагсанд нэмэх</span>
-                  <i class="fas fa-shopping-cart"></i>
-                </a>
-              {% else %}
-                <button class="btn btn-block btn-secondary" disabled>
-                  <span class="text">Бараа дууссан</span>
-                  <i class="fas fa-ban"></i>
-                </button>
-              {% endif %}
+                {% if product.stock > 0 %}
+                  <a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">
+                    <span class="text">Сагсанд нэмэх</span>
+                    <i class="fas fa-shopping-cart"></i>
+                  </a>
+                {% else %}
+                  <button class="btn btn-block btn-secondary" disabled>
+                    <span class="text">Бараа дууссан</span>
+                    <i class="fas fa-ban"></i>
+                  </button>
+                {% endif %}
 
-            </figcaption>
-          </figure>
-        </div>
-        {% empty %}
-          <p>Бүтээгдэхүүн олдсонгүй</p>
-        {% endfor %}
-      </div>
-
-      <!-- Pagination -->
-      <nav class="mt-4" aria-label="Page navigation">
-        <ul class="pagination">
-          {% if products.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ products.previous_page_number }}">Өмнөх</a>
-            </li>
-          {% else %}
-            <li class="page-item disabled"><a class="page-link">Өмнөх</a></li>
-          {% endif %}
-
-          {% for num in products.paginator.page_range %}
-            {% if products.number == num %}
-              <li class="page-item active"><a class="page-link">{{ num }}</a></li>
-            {% else %}
-              <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-            {% endif %}
+              </figcaption>
+            </figure>
+          </div>
+          {% empty %}
+            <p>Бүтээгдэхүүн олдсонгүй</p>
           {% endfor %}
+        </div>
 
-          {% if products.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ products.next_page_number }}">Дараах</a>
-            </li>
-          {% else %}
-            <li class="page-item disabled"><a class="page-link">Дараах</a></li>
-          {% endif %}
-        </ul>
-      </nav>
+        <!-- Pagination -->
+        <nav class="mt-4" aria-label="Page navigation">
+          <ul class="pagination">
+            {% if products.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ products.previous_page_number }}">Өмнөх</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><a class="page-link">Өмнөх</a></li>
+            {% endif %}
 
-    </main>
+            {% for num in products.paginator.page_range %}
+              {% if products.number == num %}
+                <li class="page-item active"><a class="page-link">{{ num }}</a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ products.next_page_number }}">Дараах</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled"><a class="page-link">Дараах</a></li>
+            {% endif %}
+          </ul>
+        </nav>
+
+      </main>
+    </div>
   </div>
-</div>
 </section>
 {% endblock %}
