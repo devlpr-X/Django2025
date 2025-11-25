@@ -11,25 +11,21 @@
       <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
 
-        {% if u_form.non_field_errors %}
-          <div class="alert alert-danger">{{ u_form.non_field_errors }}</div>
-        {% endif %}
-
         <div class="form-row">
           <div class="col form-group">
-            {{ u_form.first_name.label_tag }}
+            <label for="{{ u_form.first_name.id_for_label }}">Нэр</label>
             {{ u_form.first_name }}
             {% if u_form.first_name.errors %}<div class="text-danger small">{{ u_form.first_name.errors }}</div>{% endif %}
           </div>
           <div class="col form-group">
-            {{ u_form.last_name.label_tag }}
+            <label for="{{ u_form.last_name.id_for_label }}">Овог</label>
             {{ u_form.last_name }}
             {% if u_form.last_name.errors %}<div class="text-danger small">{{ u_form.last_name.errors }}</div>{% endif %}
           </div>
         </div>
 
         <div class="form-group">
-          {{ u_form.email.label_tag }}
+          <label for="{{ u_form.email.id_for_label }}">Цахим шуудан</label>
           {{ u_form.email }}
           {% if u_form.email.errors %}<div class="text-danger small">{{ u_form.email.errors }}</div>{% endif %}
           <small class="form-text text-muted">Цахим шууданг тань хэнтэй ч хуваалцахгүй.</small>
@@ -37,35 +33,34 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            {{ u_form.password.label_tag }}
-            {{ u_form.password }}
-            {% if u_form.password.errors %}<div class="text-danger small">{{ u_form.password.errors }}</div>{% endif %}
+            <label for="{{ u_form.password1.id_for_label }}">Нууц үг</label>
+            {{ u_form.password1 }}
+            {% if u_form.password1.errors %}<div class="text-danger small">{{ u_form.password1.errors }}</div>{% endif %}
           </div>
           <div class="form-group col-md-6">
-            {{ u_form.repeat_password.label_tag }}
-            {{ u_form.repeat_password }}
-            {% if u_form.repeat_password.errors %}<div class="text-danger small">{{ u_form.repeat_password.errors }}</div>{% endif %}
+            <label for="{{ u_form.password2.id_for_label }}">Нууц үг давтан</label>
+            {{ u_form.password2 }}
+            {% if u_form.password2.errors %}<div class="text-danger small">{{ u_form.password2.errors }}</div>{% endif %}
           </div>
         </div>
 
         <hr>
 
         <div class="form-group">
-          {{ a_form.phone_number.label_tag }}
+          <label for="{{ a_form.phone_number.id_for_label }}">Утасны дугаар</label>
           {{ a_form.phone_number }}
           {% if a_form.phone_number.errors %}<div class="text-danger small">{{ a_form.phone_number.errors }}</div>{% endif %}
         </div>
 
         <div class="form-group">
-          {{ a_form.pro_image.label_tag }}
+          <label for="{{ a_form.pro_image.id_for_label }}">Хувийн зураг</label>
           {{ a_form.pro_image }}
           {% if a_form.pro_image.errors %}<div class="text-danger small">{{ a_form.pro_image.errors }}</div>{% endif %}
         </div>
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block"> Бүртгүүлэх </button>
+          <button type="submit" class="btn btn-primary btn-block">Бүртгүүлэх</button>
         </div>
-
       </form>
     </article>
   </div>

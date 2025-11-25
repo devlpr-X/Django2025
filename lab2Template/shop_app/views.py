@@ -12,6 +12,7 @@ import sqlite3
 
 def index(request):
     products = Product.objects.order_by('-created_date')[:4]
+    print(products)
     return render(request, 'index.html', {'products': products, 'count': products.count()})
 
 
@@ -22,17 +23,32 @@ def cart(request):
 def dashboard(request):
     return render(request, "dashboard.html")
 
+from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+from .models import Category, Product, ImageGallery
+from cart_app.models import CartItem
+from cart_app.views import _cart_id
 
 def product_detail(request, categorySlug, productSlug):
     category = get_object_or_404(Category, slug=categorySlug)
     product = get_object_or_404(Product, slug=productSlug, category=category)
+
     in_cart = CartItem.objects.filter(cart__id=_cart_id(request), product=product).exists()
-    return render(request, 'product-detail.html', {
+
+    # энд ImageGallery-аас тухайн бүтээгдэхүүний бүх зураг авна
+    product_images = ImageGallery.objects.filter(product=product)
+
+    context = {
         'single_product': product,
         'in_cart': in_cart,
         'product': product,
-        'category': category
-    })
+        'category': category,
+        'product_images': product_images,  # Шинэ нэмэлт
+    }
+    return render(request, 'product-detail.html', context)
+
 
 
 def register(request):
@@ -61,30 +77,23 @@ def signin(request):
     return render(request, "signin.html")
 
 def store(request, slug=None):
-    """
-    Категориор эсвэл хайлтын параметрээр шүүлтүүлдэг store view
-    """
     categories = Category.objects.all()
     products_list = Product.objects.filter(is_available=True)
-    
-    # URL параметрүүд
+
     keyword = request.GET.get('keyword', '')
     min_price = request.GET.get('min_price', '')
     max_price = request.GET.get('max_price', '')
-    
+
     selected_category = None
     selected_category_obj = None
-    
-    # 1. URL slug-аар категори сонгосон
+
+    # 1. slug-аар фильтр
     if slug:
-        try:
-            selected_category_obj = get_object_or_404(Category, slug=slug)
-            selected_category = slug
-            products_list = products_list.filter(category=selected_category_obj)
-        except Category.DoesNotExist:
-            pass
-    
-    # 2. Query параметрээр категори сонгосон
+        selected_category_obj = get_object_or_404(Category, slug=slug)
+        selected_category = slug
+        products_list = products_list.filter(category=selected_category_obj)
+
+    # 2. Query параметрээр категори
     category_param = request.GET.get('category', '')
     if category_param and not slug:
         try:
@@ -93,14 +102,14 @@ def store(request, slug=None):
             products_list = products_list.filter(category=selected_category_obj)
         except Category.DoesNotExist:
             pass
-    
-    # 3. Түлхүүр үг хайх
+
+    # 3. Хайлтын түлхүүр үг
     if keyword:
         products_list = products_list.filter(
             Q(product_name__icontains=keyword) |
             Q(description__icontains=keyword)
         ).distinct()
-    
+
     # 4. Үнийн доод хязгаар
     if min_price:
         try:
@@ -108,7 +117,7 @@ def store(request, slug=None):
             products_list = products_list.filter(price__gte=min_price_int)
         except ValueError:
             min_price = ''
-    
+
     # 5. Үнийн дээд хязгаар
     if max_price:
         try:
@@ -116,15 +125,15 @@ def store(request, slug=None):
             products_list = products_list.filter(price__lte=max_price_int)
         except ValueError:
             max_price = ''
-    
-    # Сортлох
+
+    # Сорт
     products_list = products_list.order_by('-created_date')
-    
+
     # Хуудаслалт
     paginator = Paginator(products_list, 6)
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
-    
+
     context = {
         'categories': categories,
         'products': products,
@@ -135,6 +144,7 @@ def store(request, slug=None):
         'min_price': min_price,
         'max_price': max_price,
     }
+    print(context)
     return render(request, 'store.html', context)
 
 

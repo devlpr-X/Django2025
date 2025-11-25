@@ -1,141 +1,118 @@
-
 {% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-<!-- ========================= АГУУЛГЫН ХЭСЭГ ========================= -->
 <section class="section-content padding-y bg">
 <div class="container">
 
-<!-- ============================ БҮТЭЭГДЭХҮҮНИЙ КАРД ================================= -->
 <div class="card">
-	<div class="row no-gutters">
-		<aside class="col-md-6">
-<article class="gallery-wrap"> 
-	<div class="img-big-wrap">
-	   {% if product.images %}
-	   <a href="#"><img src="{{ product.images.url }}" alt="{{ product.product_name }}"></a>
-	   {% else %}
-	   <a href="#"><img src="{% static 'images/default_product.jpg' %}" alt="{{ product.product_name }}"></a>
-	   {% endif %}
-	</div> <!-- img-big-wrap.// -->
-</article> <!-- gallery-wrap .end// -->
-		</aside>
-		<main class="col-md-6 border-left">
-<article class="content-body">
+  <div class="row no-gutters">
+    <aside class="col-md-6">
+      <article class="gallery-wrap">
+        <div class="img-big-wrap text-center">
+          {# Гол том зураг: хэрвээ gallery зураг байвал эхний gallery, үгүй бол product.images хэрэглэнэ #}
+          {% if product_images and product_images.exists %}
+            <a id="main-image-link" href="#"><img id="main-image" src="{{ product_images.first.image.url }}" alt="{{ single_product.product_name }}" class="img-fluid"></a>
+          {% elif product.images %}
+            <a id="main-image-link" href="#"><img id="main-image" src="{{ product.images.url }}" alt="{{ single_product.product_name }}" class="img-fluid"></a>
+          {% else %}
+            <a id="main-image-link" href="#"><img id="main-image" src="{% static 'images/default_product.jpg' %}" alt="{{ single_product.product_name }}" class="img-fluid"></a>
+          {% endif %}
+        </div>
 
-<h2 class="title">{{ product.product_name }}</h2>
+        {% if product_images and product_images.exists %}
+        <div class="thumbs mt-3 d-flex flex-wrap justify-content-center">
+          {% for img in product_images %}
+            <div class="p-1">
+              <img src="{{ img.image.url }}" data-full="{{ img.image.url }}" class="img-thumbnail thumb-image" style="width:80px;height:80px;object-fit:cover;cursor:pointer;">
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </article>
+    </aside>
 
-<div class="mb-3"> 
-	<var class="price h4">${{ product.price }}</var> 
-	{% if product.old_price %}
-	<del class="price-old">${{ product.old_price }}</del>
-	{% endif %}
-</div> 
+    <main class="col-md-6 border-left">
+      <article class="content-body">
+        <h2 class="title">{{ single_product.product_name }}</h2>
 
-<p>{{ product.description|default:"Бүтээгдэхүүний мэдээлэл алга байна." }}</p>
+        <div class="mb-3">
+          <var class="price h4">{{ single_product.price }}₮</var>
+          {% if single_product.old_price %}
+            <del class="price-old">{{ single_product.old_price }}₮</del>
+          {% endif %}
+        </div>
 
-<hr>
-<div class="row">
-	<div class="item-option-select">
-		<h6>Өнгө сонгох</h6>
-		<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_color"> Мөнгө
-		  </label>
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_color"> Саарал
-		  </label>
-		  <label class="btn btn-light active">
-		    <input type="radio" name="radio_color" checked> Алтан
-		  </label>
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_color"> Хар
-		  </label>
-		</div> 
-	</div>
-</div> <!-- row.// -->
+        <p>{{ single_product.description|default:"Бүтээгдэхүүний мэдээлэл алга байна." }}</p>
 
-<div class="row">
-	<div class="item-option-select">
-		<h6>Хэмжээ сонгох</h6>
-		<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_size"> S
-		  </label>
-		  <label class="btn btn-light active">
-		    <input type="radio" name="radio_size" checked> M
-		  </label>
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_size"> L
-		  </label>
-		  <label class="btn btn-light">
-		    <input type="radio" name="radio_size"> XL
-		  </label>
-		</div> 
-	</div>
-</div> <!-- row.// -->
+        <hr>
+        <!-- (эхний төрөлийн товчнууд болон сагс үйлдлүүд таны бичсэнтэй адил) -->
+        {% if single_product.stock <= 0 %}
+        <button class="btn btn-secondary" disabled>
+          <span class="text">Бараа дууссан</span>
+          <i class="fas fa-ban"></i>
+        </button>
+        {% else %}
+          {% if in_cart %}
+            <a href="#" class="btn btn-success"><i class="fas fa-check"></i></a>
+            <a href="{% url 'cart' %}" class="btn btn-outline-primary"><span class="text">Сагс харах</span> <i class="fas fa-eye"></i></a>
+          {% else %}
+            <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary"><span class="text">Сагсанд нэмэх</span> <i class="fas fa-shopping-cart"></i></a>
+          {% endif %}
+        {% endif %}
+      </article>
+    </main>
+  </div>
+</div>
 
-<hr>
-
-{% if single_product.stock <= 0 %}
-<button class="btn btn-secondary" disabled>
-	<span class="text">Бараа дууссан</span>
-	<i class="fas fa-ban"></i>
-</button>
-{% else %}
-	{% if in_cart %}
-		<a href="" class="btn btn-success">
-			<i class="fas fa-check"></i>
-		</a>
-		<a href="{% url 'cart' %}" class="btn btn-outline-primary">
-			<span class="text">Сагс харах</span> <i class="fas fa-eye"></i>
-		</a>
-	{% else %}
-		<a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary">
-			<span class="text">Сагсанд нэмэх</span> 
-			<i class="fas fa-shopping-cart"></i>
-		</a>
-	{% endif %}
-{% endif %}
-
-
-</article> <!-- content-body .// -->
-		</main> <!-- col.// -->
-	</div> <!-- row.// -->
-</div> <!-- card.// -->
-<!-- ============================ БҮТЭЭГДЭХҮҮНИЙ КАРД ДУУСАВ ================================= -->
-
+<!-- сэтгэгдэл хэсэг (таны оригиналтай адил) -->
 <br>
-
 <div class="row">
-	<div class="col-md-9">
+  <div class="col-md-9">
+    <header class="section-heading">
+      <h3>Хэрэглэгчийн сэтгэгдэл</h3>
+    </header>
+    <!-- sample comment -->
+    <article class="box mb-3">
+      <div class="icontext w-100">
+        <img src="{% static 'images/avatars/avatar1.jpg' %}" class="img-xs icon rounded-circle" alt="Avatar">
+        <div class="text">
+          <span class="date text-muted float-md-right">2020.04.24</span>
+          <h6 class="mb-1">Майк Жон</h6>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p>Жишээ сэтгэгдэл Lorem ipsum dolor sit amet...</p>
+      </div>
+    </article>
+  </div>
+</div>
 
-	<header class="section-heading">
-		<h3>Хэрэглэгчийн сэтгэгдэл</h3>  
-	</header>
-
-	<article class="box mb-3">
-		<div class="icontext w-100">
-			<img src="{% static 'images/avatars/avatar1.jpg' %}" class="img-xs icon rounded-circle" alt="Avatar">
-			<div class="text">
-				<span class="date text-muted float-md-right">2020.04.24 </span>  
-				<h6 class="mb-1">Майк Жон</h6>
-			</div>
-		</div> <!-- icontext.// -->
-		<div class="mt-3">
-			<p>
-				Жишээ сэтгэгдэл Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip
-			</p>	
-		</div>
-	</article>
-
-	</div> <!-- col.// -->
-</div> <!-- row.// -->
-
-</div> <!-- container .//  -->
+</div>
 </section>
-<!-- ========================= АГУУЛГЫН ХЭСЭГ ДУУСАВ ========================= -->
+
+{% block extra_js %}
+<script>
+  // thumbnail дээр дархад main-image-г солино
+  document.addEventListener('DOMContentLoaded', function () {
+    const thumbs = document.querySelectorAll('.thumb-image');
+    const mainImg = document.getElementById('main-image');
+    const mainLink = document.getElementById('main-image-link');
+
+    thumbs.forEach(function(t) {
+      t.addEventListener('click', function() {
+        const src = this.getAttribute('data-full');
+        if (mainImg) mainImg.src = src;
+        if (mainLink) mainLink.href = src;
+        // жижиг border/active state
+        thumbs.forEach(x => x.classList.remove('active-thumb'));
+        this.classList.add('active-thumb');
+      });
+    });
+  });
+</script>
+<style>
+  .thumb-image.active-thumb { outline: 2px solid #007bff; }
+</style>
+{% endblock %}
 {% endblock %}
