@@ -1,78 +1,75 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-<!-- ========================= АГУУЛГА ХЭСЭГ ========================= -->
 <section class="section-content padding-y">
-
-<!-- ============================ БҮРТГҮҮЛЭХ ХЭСЭГ ================================= -->
-<div class="card mx-auto" style="max-width:520px; margin-top:40px;">
+  <div class="card mx-auto" style="max-width:520px; margin-top:40px;">
     <article class="card-body">
-        <header class="mb-4"><h4 class="card-title">Бүртгүүлэх</h4></header>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-row">
-                <div class="col form-group">
-                    <label>Нэр</label>
-                    <input type="text" name="first_name" class="form-control" placeholder="" required>
-                </div>
-                <div class="col form-group">
-                    <label>Овог</label>
-                    <input type="text" name="last_name" class="form-control" placeholder="" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Цахим шуудан</label>
-                <input type="email" name="email" class="form-control" placeholder="" required>
-                <small class="form-text text-muted">Цахим шууданг тань хэнтэй ч хуваалцахгүй.</small>
-            </div>
-            <div class="form-group">
-                <label class="custom-control custom-radio custom-control-inline">
-                    <input class="custom-control-input" type="radio" name="gender" value="male" checked>
-                    <span class="custom-control-label"> Эрэгтэй </span>
-                </label>
-                <label class="custom-control custom-radio custom-control-inline">
-                    <input class="custom-control-input" type="radio" name="gender" value="female">
-                    <span class="custom-control-label"> Эмэгтэй </span>
-                </label>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>Хот</label>
-                    <input type="text" name="city" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Улс</label>
-                    <select name="country" class="form-control">
-                        <option>Сонгоно уу...</option>
-                        <option>Узбекистан</option>
-                        <option>Орос</option>
-                        <option selected>АНУ</option>
-                        <option>Энэтхэг</option>
-                        <option>Афганистан</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label>Нууц үг үүсгэх</label>
-                    <input type="password" name="password1" class="form-control" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Нууц үгээ давт</label>
-                    <input type="password" name="password2" class="form-control" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block"> Бүртгүүлэх </button>
-            </div>
-        </form>
+      <header class="mb-4"><h4 class="card-title">Бүртгүүлэх</h4></header>
+
+      {% include 'includes/alert.html' %}
+
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% if u_form.non_field_errors %}
+          <div class="alert alert-danger">{{ u_form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="form-row">
+          <div class="col form-group">
+            {{ u_form.first_name.label_tag }}
+            {{ u_form.first_name }}
+            {% if u_form.first_name.errors %}<div class="text-danger small">{{ u_form.first_name.errors }}</div>{% endif %}
+          </div>
+          <div class="col form-group">
+            {{ u_form.last_name.label_tag }}
+            {{ u_form.last_name }}
+            {% if u_form.last_name.errors %}<div class="text-danger small">{{ u_form.last_name.errors }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ u_form.email.label_tag }}
+          {{ u_form.email }}
+          {% if u_form.email.errors %}<div class="text-danger small">{{ u_form.email.errors }}</div>{% endif %}
+          <small class="form-text text-muted">Цахим шууданг тань хэнтэй ч хуваалцахгүй.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            {{ u_form.password.label_tag }}
+            {{ u_form.password }}
+            {% if u_form.password.errors %}<div class="text-danger small">{{ u_form.password.errors }}</div>{% endif %}
+          </div>
+          <div class="form-group col-md-6">
+            {{ u_form.repeat_password.label_tag }}
+            {{ u_form.repeat_password }}
+            {% if u_form.repeat_password.errors %}<div class="text-danger small">{{ u_form.repeat_password.errors }}</div>{% endif %}
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+          {{ a_form.phone_number.label_tag }}
+          {{ a_form.phone_number }}
+          {% if a_form.phone_number.errors %}<div class="text-danger small">{{ a_form.phone_number.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ a_form.pro_image.label_tag }}
+          {{ a_form.pro_image }}
+          {% if a_form.pro_image.errors %}<div class="text-danger small">{{ a_form.pro_image.errors }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block"> Бүртгүүлэх </button>
+        </div>
+
+      </form>
     </article>
-</div>
+  </div>
 
-<p class="text-center mt-4">Бүртгэлтэй юу? <a href="{% url 'signin' %}">Нэвтрэх</a></p>
-<br><br>
-<!-- ============================ БҮРТГҮҮЛЭХ ХЭСЭГ ДУУСАВ ================================= -->
-
+  <p class="text-center mt-4">Бүртгэлтэй юу? <a href="{% url 'signin' %}">Нэвтрэх</a></p>
 </section>
 {% endblock %}

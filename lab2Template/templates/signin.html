@@ -1,35 +1,32 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-<!-- ========================= АГУУЛГА ХЭСЭГ ========================= -->
 <section class="section-content padding-y" style="min-height:84vh">
-
-<!-- ============================ НЭВТРЭХ ХЭСЭГ   ================================= -->
-<div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+  <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
     <div class="card-body">
-        <h4 class="card-title mb-4">Нэвтрэх</h4>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="email" name="email" class="form-control" placeholder="Цахим шуудан" required>
-            </div>
-            <div class="form-group">
-                <input type="password" name="password" class="form-control" placeholder="Нууц үг" required>
-            </div>
-            <div class="form-group">
-                <a href="#" class="float-right">Нууц үгээ мартсан уу?</a>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block"> Нэвтрэх </button>
-            </div>
-        </form>
+      <h4 class="card-title mb-4">Нэвтрэх</h4>
+
+      {% include 'includes/alert.html' %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="email" name="email" class="form-control" placeholder="Цахим шуудан" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" class="form-control" placeholder="Нууц үг" required>
+        </div>
+        <div class="form-group">
+          <a href="#" class="float-right">Нууц үгээ мартсан уу?</a>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block"> Нэвтрэх </button>
+        </div>
+      </form>
     </div>
-</div>
+  </div>
 
-<p class="text-center mt-4">Бүртгэлгүй юу? <a href="{% url 'register' %}">Бүртгүүлэх</a></p>
-<br><br>
-<!-- ============================ НЭВТРЭХ ХЭСЭГ ДУУСАВ ================================= -->
-
+  <p class="text-center mt-4">Бүртгэлгүй юу? <a href="{% url 'register' %}">Бүртгүүлэх</a></p>
+  <br><br>
 </section>
 {% endblock %}

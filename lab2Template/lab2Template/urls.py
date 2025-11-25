@@ -12,8 +12,9 @@ urlpatterns = [
     path("signin/",     views.signin,   name="signin"),
     path("register/",   views.register, name="register"),
     
+    path("accounts/",       include('accounts.urls'),          name="accounts"),
     path("cart/",           include('cart_app.urls'),          name="cart"),
-    path("store/",           include('shop_app.urls'),          name="store"),
+    path("store/",          include('shop_app.urls'),          name="store"),
     path("cart/",           views.cart,          name="cart"),
     path("dashboard/",      views.dashboard,     name="dashboard"),
     path("search/",         views.search_result, name="search_result"),

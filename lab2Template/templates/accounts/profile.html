@@ -1,0 +1,11 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Хэрэглэгчийн Профайл</h2>
+    <p><strong>Нэр:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <a href="{% url 'logout' %}" class="btn btn-danger">Гарах</a>
+</div>
+{% endblock %}
