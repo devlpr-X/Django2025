@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=20, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True, unique = True)
     pro_image = models.ImageField(upload_to='photos/accounts', blank=True, null=True)
 
     def __str__(self):
