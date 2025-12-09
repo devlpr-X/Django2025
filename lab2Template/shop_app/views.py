@@ -2,13 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
-from .models import Product, Category
+from .models import Category, Product, ImageGallery, ReviewRating
 from cart_app.models import Cart, CartItem
 from cart_app.views import _cart_id
 from django.core.paginator import Paginator
 from django.db import connection
 from .models import Category, Product
-import sqlite3
+from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     products = Product.objects.order_by('-created_date')[:4]
@@ -22,34 +23,65 @@ def cart(request):
 
 def dashboard(request):
     return render(request, "dashboard.html")
-
-from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
-from django.db.models import Q
-
-from .models import Category, Product, ImageGallery
-from cart_app.models import CartItem
-from cart_app.views import _cart_id
+    from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Avg
 
 def product_detail(request, categorySlug, productSlug):
     category = get_object_or_404(Category, slug=categorySlug)
     product = get_object_or_404(Product, slug=productSlug, category=category)
 
-    in_cart = CartItem.objects.filter(cart__id=_cart_id(request), product=product).exists()
+    # Энэ бүтээгдэхүүнд бүх сэтгэгдлүүдийг авах
+    comments = ReviewRating.objects.filter(product=product).order_by('-created_date')
+    
+    rating_avg = ReviewRating.objects.filter(product=product).aggregate(avg=Avg("rating"))["avg"] or 0
+    rating_percent = (rating_avg / 5) * 100 if rating_avg else 0
 
-    # энд ImageGallery-аас тухайн бүтээгдэхүүний бүх зураг авна
-    product_images = ImageGallery.objects.filter(product=product)
+    # ⭐ Comment бүрт хувь тооцоолох
+    for c in comments:
+        c.percent = (c.rating / 5) * 100
 
     context = {
-        'single_product': product,
-        'in_cart': in_cart,
-        'product': product,
-        'category': category,
-        'product_images': product_images,  # Шинэ нэмэлт
+        "single_product": product,
+        "comments": comments,
+        "rating_avg": round(rating_avg, 2),
+        "rating_percent": rating_percent,
+        "in_cart": CartItem.objects.filter(cart__id=_cart_id(request), product=product).exists(),
+        "product_images": ImageGallery.objects.filter(product=product)
     }
-    return render(request, 'product-detail.html', context)
+    return render(request, "product-detail.html", context)
 
 
+def submit_review(request, product_id):
+    if request.method == 'POST':
+        rate = request.POST.get('rate')
+        title = request.POST.get('title', '').strip()
+        review_text = request.POST.get('review', '').strip()
+        
+        try:
+            rate_val = float(rate)
+            if not (0.0 < rate_val <= 5.0):
+                raise ValueError
+        except (TypeError, ValueError):
+            messages.error(request, "Зөв үнэлгээ оруулна уу (1-5).")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        product = get_object_or_404(Product, id=product_id)
+
+        # Хэрэглэгч олон удаа сэтгэгдэл үлдээж болно
+        ReviewRating.objects.create(
+            product=product,
+            user=request.user,
+            rating=rate_val,
+            title=title,
+            review=review_text,
+            ip=request.META.get('REMOTE_ADDR'),
+        )
+        
+        messages.success(request, "Таны сэтгэгдэл хадгалагдлаа.")
+        return redirect(product.getUrl())
+
+    return redirect('/')
 
 def register(request):
     return render(request, "register.html")

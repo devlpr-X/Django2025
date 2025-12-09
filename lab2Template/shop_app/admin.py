@@ -44,3 +44,5 @@ class ImageGalleryAdmin(admin.ModelAdmin):
                 return ""
         return ""
     thumb.short_description = "Thumbnail"
+
+

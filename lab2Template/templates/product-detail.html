@@ -13,151 +13,304 @@
       <article class="gallery-wrap">
 
         <div class="position-relative" style="width:100%;">
-
-            <!-- MAIN IMAGE -->
             {% if product_images and product_images.exists %}
-              <img id="main-image" 
-                   src="{{ product_images.first.image.url }}" 
-                   class="img-fluid main-image-zoom" 
-                   style="width:100%; max-width:100%; cursor: zoom-in;">
+              <img id="main-image" src="{{ product_images.first.image.url }}" class="img-fluid main-image-zoom" style="width:100%;cursor: zoom-in;">
             {% elif single_product.images %}
-              <img id="main-image" 
-                   src="{{ single_product.images.url }}" 
-                   class="img-fluid main-image-zoom"
-                   style="width:100%; max-width:100%; cursor: zoom-in;">
+              <img id="main-image" src="{{ single_product.images.url }}" class="img-fluid main-image-zoom" style="width:100%;cursor: zoom-in;">
             {% else %}
-              <img id="main-image" 
-                   src="{% static 'images/default_product.jpg' %}" 
-                   class="img-fluid main-image-zoom"
-                   style="width:100%; max-width:100%; cursor: zoom-in;">
+              <img id="main-image" src="{% static 'images/default_product.jpg' %}" class="img-fluid main-image-zoom" style="width:100%;cursor: zoom-in;">
             {% endif %}
-
-            <!-- ZOOM BOX -->
             <div id="zoom-box"></div>
-
         </div>
 
-        <!-- THUMB LIST -->
         {% if product_images and product_images.exists %}
         <div class="d-flex mt-3 flex-wrap">
           {% for img in product_images %}
-            <img src="{{ img.image.url }}"
-                 data-full="{{ img.image.url }}"
+            <img src="{{ img.image.url }}" data-full="{{ img.image.url }}"
                  class="img-thumbnail thumb-image"
                  style="width:80px;height:80px;object-fit:cover;margin:5px;cursor:pointer;">
           {% endfor %}
         </div>
         {% endif %}
-
       </article>
     </aside>
 
-    <!-- RIGHT SIDE PRODUCT INFO -->
+    <!-- RIGHT SIDE INFO -->
     <main class="col-md-6 border-left">
       <article class="content-body">
         <h2 class="title">{{ single_product.product_name }}</h2>
 
-        <div class="mb-3">
-          <var class="price h4">{{ single_product.price }}₮</var>
-          {% if single_product.old_price %}
-          <del class="price-old">{{ single_product.old_price }}₮</del>
-          {% endif %}
+        <!-- ⭐ RATING STARS - Хувиар харуулах -->
+        <div class="rating-display mb-3 d-flex align-items-center">
+          <div class="stars-container" data-rating="{{ rating_percent }}">
+            <div class="stars-outer">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+            </div>
+            <div class="stars-inner">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+            </div>
+          </div>
+          <span class="text-dark ml-2"><strong>{{ rating_avg }}</strong>/5</span>
+          <span class="text-muted ml-2">({{ comments.count }} үнэлгээ)</span>
         </div>
 
-        <p>{{ single_product.description|default:"Бүтээгдэхүүний мэдээлэл алга байна." }}</p>
+        <div class="mb-3">
+          <var class="price h4">{{ single_product.price }}₮</var>
+          {% if single_product.old_price %}<del class="price-old">{{ single_product.old_price }}₮</del>{% endif %}
+        </div>
 
+        <p>{{ single_product.description|default:"Мэдээлэл байхгүй" }}</p>
         <hr>
 
         {% if single_product.stock <= 0 %}
           <button class="btn btn-secondary" disabled>Бараа дууссан</button>
         {% else %}
           {% if in_cart %}
-            <a href="#" class="btn btn-success"><i class="fas fa-check"></i></a>
+            <a href="#" class="btn btn-success"><i class="fas fa-check"></i> Сагсанд нэмсэн</a>
             <a href="{% url 'cart' %}" class="btn btn-outline-primary">Сагс харах</a>
           {% else %}
             <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary">Сагсанд нэмэх</a>
           {% endif %}
         {% endif %}
-
       </article>
     </main>
-
   </div>
 </div>
+
+
+
+<!-- ⭐⭐ Review Submit Form ⭐⭐ -->
+<div class="card mt-4 p-4">
+  <h4>Сэтгэгдэл үлдээх</h4>
+
+  {% if user.is_authenticated %}
+  <form method="POST" action="{% url 'submit_review' single_product.id %}">
+    {% csrf_token %}
+
+    <!-- Clickable Stars -->
+    <div id="rateStars" class="rate-stars mb-3">
+      <i class="fa fa-star star" data-val="1"></i>
+      <i class="fa fa-star star" data-val="2"></i>
+      <i class="fa fa-star star" data-val="3"></i>
+      <i class="fa fa-star star" data-val="4"></i>
+      <i class="fa fa-star star" data-val="5"></i>
+    </div>
+    <input type="hidden" name="rate" id="rateInput">
+
+    <input type="text" name="title" class="form-control mb-3" placeholder="Гарчиг (заавал биш)">
+    <textarea name="review" class="form-control mb-3" placeholder="Сэтгэгдэл..." rows="3" required></textarea>
+    <button class="btn btn-success">Илгээх</button>
+  </form>
+  {% else %}
+  <p>Сэтгэгдэл бичих бол <a href="{% url 'signin' %}">нэвтэр</a></p>
+  {% endif %}
+</div>
+
+<!-- ⭐⭐ Reviews List -->
+<div class="card mt-4 p-4">
+  <h4>Сэтгэгдлүүд ({{ comments.count }})</h4>
+
+  {% for c in comments %}
+  <div class="border-bottom py-3">
+      <div class="d-flex align-items-start mb-2">
+          <!-- Хэрэглэгчийн зураг -->
+          <div class="mr-3">
+              {% if c.user.profile.avatar %}
+                <img src="{{ c.user.profile.avatar.url }}" class="rounded-circle" style="width:45px;height:45px;object-fit:cover;">
+              {% else %}
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" 
+                     style="width:45px;height:45px;font-size:20px;font-weight:bold;">
+                  {{ c.user.username|first|upper }}
+                </div>
+              {% endif %}
+          </div>
+          
+          <div class="flex-grow-1">
+              <div class="d-flex align-items-center mb-1">
+                  <b class="mr-2">{{ c.user.username }}</b>
+                  
+                  <!-- ⭐ Хувиар харуулах од -->
+                  <div class="stars-container small-stars" data-rating="{{ c.percent }}">
+                    <div class="stars-outer">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                    </div>
+                    <div class="stars-inner">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                    </div>
+                  </div>
+                  <span class="ml-2 text-muted small">({{ c.rating }})</span>
+              </div>
+
+              {% if c.title %}
+                <h6 class="mb-1 font-weight-bold">{{ c.title }}</h6>
+              {% endif %}
+              
+              <p class="mt-2 mb-1">{{ c.review }}</p>
+              <small class="text-muted">{{ c.created_at|date:"Y/m/d H:i" }}</small>
+          </div>
+      </div>
+  </div>
+  {% empty %}
+    <p class="text-muted">Сэтгэгдэл хараахан алга.</p>
+  {% endfor %}
+</div>
+
 
 </div>
 </section>
 {% endblock %}
 
+
 {% block extra_js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
-  /* RIGHT SIDE ZOOM WINDOW */
-  #zoom-box {
+#zoom-box {
     width: 380px;
     height: 380px;
     position: absolute;
     top: 0;
     left: 102%;
-    border: 1px solid #ddd;
-    background-repeat: no-repeat;
     background-size: 200%;
+    background-repeat: no-repeat;
+    border: 1px solid #ddd;
     display: none;
     z-index: 999;
-  }
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
 
-  .thumb-image.active-thumb {
-    outline: 2px solid #007bff;
-  }
+.star {
+    font-size: 32px;
+    color: #ddd;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.star:hover {
+    color: #ffb600;
+    transform: scale(1.1);
+}
+
+.star.active {
+    color: #ffb600;
+}
+
+/* ⭐⭐ Оддын хувиар харуулах система */
+.stars-container {
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+}
+
+.stars-outer {
+    position: relative;
+    display: inline-block;
+}
+
+.stars-outer i {
+    color: #e0e0e0;
+    font-size: 20px;
+}
+
+.stars-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0%;
+}
+
+.stars-inner i {
+    color: #ffc107;
+    font-size: 20px;
+}
+
+/* Жижиг одууд (сэтгэгдлийн дотор) */
+.small-stars .stars-outer i {
+    font-size: 15px;
+}
+
+.small-stars .stars-inner i {
+    font-size: 15px;
+}
 </style>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const mainImage = document.getElementById("main-image");
-    const zoomBox = document.getElementById("zoom-box");
+document.addEventListener("DOMContentLoaded", function(){
 
-    if (!mainImage) return;
+  /** ⭐ Оддын хувийг тохируулах */
+  document.querySelectorAll('.stars-container').forEach(function(container) {
+    const rating = container.getAttribute('data-rating');
+    const starsInner = container.querySelector('.stars-inner');
+    if (rating && starsInner) {
+      starsInner.style.width = rating + '%';
+    }
+  });
 
-    /* -------------------------
-       MAIN HOVER ZOOM
-    -------------------------- */
-    mainImage.addEventListener("mouseenter", function () {
-        zoomBox.style.display = "block";
-        zoomBox.style.backgroundImage = `url('${mainImage.src}')`;
-    });
+  /** ⭐ RATING CLICK SCRIPT */
+  const stars = document.querySelectorAll(".star");
+  const input = document.getElementById("rateInput");
+  
+  stars.forEach(star => {
+    star.onclick = () => {
+      input.value = star.dataset.val;
+      stars.forEach(s => {
+        if (s.dataset.val <= star.dataset.val) {
+          s.classList.add("active");
+        } else {
+          s.classList.remove("active");
+        }
+      });
+    };
+  });
 
-    mainImage.addEventListener("mousemove", function (e) {
-        const rect = mainImage.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let y = e.clientY - rect.top;
+  /** ⭐ IMAGE ZOOM */
+  const mainImage = document.getElementById("main-image");
+  const zoomBox = document.getElementById("zoom-box");
+  
+  if (mainImage) {
+    mainImage.onmouseenter = () => {
+      zoomBox.style.display = "block";
+      zoomBox.style.backgroundImage = `url('${mainImage.src}')`;
+    };
+    
+    mainImage.onmousemove = (e) => {
+      let rect = mainImage.getBoundingClientRect();
+      let xPercent = ((e.clientX - rect.left) / rect.width) * 100;
+      let yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+      zoomBox.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+    };
+    
+    mainImage.onmouseleave = () => {
+      zoomBox.style.display = "none";
+    };
+  }
 
-        let xPercent = (x / rect.width) * 100;
-        let yPercent = (y / rect.height) * 100;
-
-        zoomBox.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
-    });
-
-    mainImage.addEventListener("mouseleave", function () {
-        zoomBox.style.display = "none";
-    });
-
-    /* -------------------------
-       THUMBNAIL CLICK
-    -------------------------- */
-    const thumbs = document.querySelectorAll(".thumb-image");
-
-    thumbs.forEach(t => {
-        t.addEventListener("click", function () {
-
-            const newSrc = this.dataset.full;
-            mainImage.src = newSrc;
-
-            // Update zoom source
-            zoomBox.style.backgroundImage = `url('${newSrc}')`;
-
-            thumbs.forEach(x => x.classList.remove("active-thumb"));
-            this.classList.add("active-thumb");
-        });
-    });
+  /** ⭐ THUMBNAIL CLICK */
+  document.querySelectorAll(".thumb-image").forEach(thumb => {
+    thumb.onclick = () => {
+      mainImage.src = thumb.dataset.full;
+      zoomBox.style.backgroundImage = `url('${thumb.dataset.full}')`;
+    };
+  });
 });
 </script>
 {% endblock %}

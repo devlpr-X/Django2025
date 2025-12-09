@@ -134,21 +134,26 @@
             <div class="col-md-3 mb-4">
                 <div class="card card-product-grid">
                     <div class="img-wrap">
+                        
                         {% if product.images %}
+                        <h1>{{product.rating_avg}}</h1>
                         <a href="{{ product.getUrl }}">
-                                <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
-                            </a>
+                            <img src="{{ product.images.url }}" alt="{{ product.product_name }}">
+                        </a>
                         {% else %}
-                                <h1>Hello {{product.images}}</h1>
+                        <h1>Hello {{product.images}}</h1>
                             <img src="{% static 'images/no_image_available.png' %}" alt="No image">
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
 
-                    <figcaption class="info-wrap p-2">
-                        <a href="{{ product.getUrl }}" class="title">{{ product.product_name }}</a>
-                        <div class="price-wrap mt-2">
-                            <span class="price">{{ product.price|intcomma }}₮</span>
-                            {% if product.old_price %}
+                        <figcaption class="info-wrap p-2">
+                            <a href="{{ product.getUrl }}" class="title">{{ product.product_name }}</a>
+                            {% if product.average_rating != 0 %}
+                            <span>⭐{{ product.average_rating }}/5</span>
+                            {% endif %}
+                            <div class="price-wrap mt-2">
+                                <span class="price">{{ product.price|intcomma }}₮</span>
+                                {% if product.old_price %}
                                 <del class="price-old">{{ product.old_price|intcomma }}₮</del>
                             {% endif %}
                         </div>
